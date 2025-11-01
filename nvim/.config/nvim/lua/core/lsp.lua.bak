@@ -1,17 +1,3 @@
--- Mason PATH is handled by core.mason-path
-vim.lsp.enable({
-    "lua-ls",
-    "gopls",
-    "zls",
-    "ts-ls",
-    "rust-analyzer",
-    "intelephense",
-    "tailwindcss",
-    "html-ls",
-    "css-ls",
-    "vue-ls",
-})
-
 -- LSP servers are automatically managed by Mason
 -- Use :MasonVerify to check which tools are Mason-managed
 
@@ -364,3 +350,39 @@ vim.opt.statusline = table.concat({
     " %l:%c",                      -- Line:Column
     " %p%%"                        -- Percentage through file
 }, " ")
+
+
+
+
+
+
+
+-- vim.lsp.config['lua_ls'] = {
+--     -- command and arguments to start the server.
+--     cmd = { 'lua-language-server' },
+--     -- filetypes to automatically attach to.
+--     filetypes = { 'lua' },
+--     -- sets the "workspace" to the directory where any of these files is found.
+--     -- files that share a root directory will reuse the lsp server connection.
+--     -- nested lists indicate equal priority, see |vim.lsp.config|.
+--     root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
+--     -- specific settings to send to the server. the schema is server-defined.
+--     -- example: https://raw.githubusercontent.com/luals/vscode-lua/master/setting/schema.json
+--     settings = {
+--         lua = {
+--             runtime = {
+--                 version = 'luajit',
+--             }
+--         }
+--     }
+-- }
+
+
+-- ~/.config/nvim/lua/lsp/julia.lua (for example)
+
+-- vim.lsp.config['julials'] = {
+--       filetypes = { 'julia' },
+--
+}
+
+

@@ -9,9 +9,9 @@ local map = vim.keymap.set
 map("v", "J", ":m '>+1<CR>gv=gv", opts)
 map("v", "K", ":m '<-2<CR>gv=gv", opts)
 
--- Fast saving
-map("n", "<leader>w", ":write!<CR>", { silent = false, desc = "Save file" })
-map("n", "<leader>q", ":q!<CR>", opts)
+-- Fast saving and quitting
+-- map("n", "<leader>w", ":write!<CR>", { silent = false, desc = "Save file" })
+-- map("n", "<leader>q", ":q!<CR>", opts)
 
 -- Remap for dealing with visual line wraps
 map("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true })
@@ -159,31 +159,48 @@ map('n', '<leader>rr', '<Plug>SlimeMotionSend}}', {
 })
 
 
+-- FILE MANAGEMENT
+-- map('n', '<leader>e', "<cmd>Fyler<cr>", { desc = 'Open Oil' })
+
 -- Open broot in a terminal
 local function open_broot()
-  local cmd_string = 'terminal broot'
   
   -- Change directory to the current file's directory (assuming this is desired)
-  vim.cmd('cd %:h')
-  
+  local status, _ = pcall(vim.cmd, 'cd %:h')
+  if not status then
+    vim.cmd('terminal broot ~')
+  end
+
+  local cmd_string = 'terminal broot'
   -- Use pcall to execute the main command and check for errors
   local status, _ = pcall(vim.cmd, cmd_string)
   -- If status is false, an error occurred, so run the fallback command
   if not status then
-    vim.cmd('terminal br ~')
+    vim.cmd('terminal broot ~')
   end
 
   -- This command runs regardless of the success of the terminal broot command
   vim.cmd('startinsert')
 end
-map('n', '<leader>e', open_broot, { desc = 'open broot' })
+
+local function open_oil()
+  local cmd_string = 'Oil'
+  -- Use pcall to execute the main command and check for errors
+  local status, _ = pcall(vim.cmd, cmd_string)
+  -- If status is false, an error occurred, so run the fallback command
+  if not status then
+    vim.cmd('terminal Oil ~')
+  end
+end
+-- map('n', '<M-e>', open_broot, { desc = 'open broot' })
+map('n', '<M-e>', open_oil, { desc = 'open oil' })
 
 
 
 
 -- GenX code
 
---[[ -- Smart expand/init
+-- Smart expand/init
 map({'n', 'v'}, '<CR>', function()
   local mode = vim.fn.mode()
   if mode == 'n' then
@@ -196,4 +213,43 @@ end, { desc = 'Init or expand Treesitter selection' })
 -- Shrink
 map('v', '<BS>', function()
   vim.cmd("lua require'nvim-treesitter.incremental_selection'.node_decremental()")
-end, { desc = 'Shrink Treesitter selection' }) ]]
+end, { desc = 'Shrink Treesitter selection' })
+
+
+map('n', '<C-l>', function()
+  vim.cmd("bnext")
+end, { desc = 'Shrink Treesitter selection' })
+
+map('n', '<C-h>', function()
+  vim.cmd("bprevious")
+end, { desc = 'Shrink Treesitter selection' })
+
+
+map('n', '<M-o>', function()
+  vim.cmd("Oil")
+end, { desc = 'Oil Explorer' })
+
+-- Simple exact-word search on Shift+S
+vim.keymap.set("n", "S", function()
+  local q = vim.fn.input("Regex Pattern: \\< ...\\>")
+  if q == "" then return end
+  -- escape slash so the search pattern won't break if you type '/'
+  q = vim.fn.escape(q, "/")
+  -- put the exact-word pattern into the search register
+  vim.fn.setreg("/", "\\<" .. q .. "\\>")
+  -- jump to next match and enable highlighting
+  vim.cmd("silent! normal! n")
+  vim.o.hlsearch = true
+end, { noremap = true, silent = true, desc = "Exact word search (prompt)" })
+
+
+
+-- replaces general past with "put"
+map('n', 'p', function()
+  vim.cmd('put')
+end, { desc = 'put' })
+
+-- replaces general past with "0put"
+map('n', 'P', function()
+  vim.cmd('.-1put')
+end, { desc = 'put' })

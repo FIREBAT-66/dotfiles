@@ -3,7 +3,7 @@
     dependencies = {
       'nvim-treesitter/nvim-treesitter',
     },
-    opts = { filetypes = {'markdown', 'julia', 'tex', 'asciidoc', 'rmd', 'qmd'}, 
+    opts = { filetypes = {'markdown', 'julia', 'tex', 'asciidoc', 'rmd', 'qmd'},
     -- Hide the text when in the Insert Mode.
              hide_on_insert = true,
              internal_scale = 1.0,

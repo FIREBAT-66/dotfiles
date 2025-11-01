@@ -2,8 +2,8 @@ return {
   "folke/which-key.nvim",
   event = "VeryLazy",
   opts = {
-    preset = "helix",
-    delay = 300,
+    preset = "classic",
+    delay = 600,
     icons = {
       rules = false,
       breadcrumb = " ", -- symbol used in the command line area that shows your active key combo

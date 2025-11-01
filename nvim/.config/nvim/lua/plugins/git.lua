@@ -1,7 +1,7 @@
 return {
   {
     "lewis6991/gitsigns.nvim",
-    lazy = true,
+    lazy = false,
     event = { "BufReadPre", "BufNewFile" },
     config = function()
       -- local icons = require('config.icons')
@@ -9,8 +9,8 @@ return {
         signs = {
           add = { text = "┃" },
           change = { text = "┃" },
-          delete = { text = "_" },
-          topdelete = { text = "‾" },
+          delete = { text = "┃" },
+          topdelete = { text = "┆" },
           changedelete = { text = "~" },
           untracked = { text = "┆" },
         },
@@ -39,7 +39,7 @@ return {
           ignore_whitespace = false,
         },
         current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
-        sign_priority = 6,
+        sign_priority = 1000,
         status_formatter = nil,
         update_debounce = 200,
         max_file_length = 40000,

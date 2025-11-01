@@ -2,7 +2,7 @@ return {
   {
     "rachartier/tiny-inline-diagnostic.nvim",
     event = "VeryLazy", -- Or `LspAttach`
-    priority = 1000,    -- needs to be loaded in first
+    priority = 6,    -- needs to be loaded in first
     config = function()
       -- Default configuration
       require("tiny-inline-diagnostic").setup({
@@ -10,7 +10,7 @@ return {
         -- Available options:
         -- "modern", "classic", "minimal", "powerline",
         -- "ghost", "simple", "nonerdfont", "amongus"
-        preset = "classic",
+        preset = "simple",
 
         transparent_bg = false,     -- Set the background of the diagnostic to transparent
         transparent_cursorline = false, -- Set the background of the cursorline to transparent (only one the first diagnostic)

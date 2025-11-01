@@ -3,19 +3,57 @@
 # Initialize zoxide
 eval "$(zoxide init bash)"
 # Initialize broot
-source /home/wytchfyre/.config/broot/launcher/bash/br
+# source /home/firebat/.config/broot/launcher/bash/br
 
+# source /home/firebat/.config/broot/launcher/bash/br
 # Function to return the size of the git repo
 gc(){
   echo "|.git| = $(du -s .git)"
 } 
 
+# Advanced fzf finder using fzf and find. Toggles between a directory find and a file find. Uses process substitution to permit asynchronous piping to the fzf output (which may result in delays in finding the target file if the directory is large). Also supports toggling search depth via CTRL+<INTEGER>. Will copy the selected directory or filename to clipboard using wl-copy
+ff() {
+    local selected_dir
+    local current_dir=$(pwd)
+    selected_dir=$(fzf --reverse --height=50% < <(find .))
+    if [[ -n "$selected_dir" ]] && [[ -d "$selected_dir" ]]; then
+        cd "$selected_dir" && wl-copy "${current_dir}/${selected_dir#*/}"
+    elif [[ -n "$selected_dir" ]] && [[ -f "$selected_dir" ]]; then
+        xdg-open "$selected_dir" && wl-copy "${current_dir}/${selected_dir#*/}"
+    else
+        echo "No file or directory selected"
+    fi
+}
+
+
 locate(){
 ls -a | fzf --bind='ctrl-d:change-prompt(directories: )+reload(find . -type d)' --bind='ctrl-f:change-prompt(files: )+reload(find . -type f)' --header 'ctrl-d (directory_search) / ctrl-f (file_search)'
 }
 
-# Bind Alt+B to insert 'br' and press Enter (newline)
-bind '"\ee": "br\n"'
+# Custom alias to open Neovim and launch Oil in the current directory
+alias nvoil='nvim -c "Oil"'
+bind '"\ee": "nvoil\n"'
+
+bind '"\e\r": "nvim\n"'
+
+# Function to run Vieb
+vieb() {
+    # Save the current directory and change to the new one
+    pushd /home/firebat/repositories/Vieb > /dev/null
+
+    # Run the command
+    npm start &
+
+    # Return to the previous directory
+    popd > /dev/null
+}
+
+benv() {
+  source /home/firebat/venv_3.11/bin/activate
+}
+
+
+export PS1='\[\e[38;2;255;96;0m\]╭──(\[\e[1;32m\]\u\[\e[0m\])-[\[\e[1;37m\]\w\[\e[38;2;255;96;0m\]]\n\[\e[38;2;255;96;0m\]╰─\[\e[38;2;255;96;0m\]\[\e[0m\] '
 
 # fl() {
 #     local selected_dir
@@ -34,6 +72,9 @@ bind '"\ee": "br\n"'
 #     fi
 # }
 
+
+
+
 find_excluding_dir() {
   # ... argument checking omitted for brevity ...
   local dir_path="$1"
@@ -48,11 +89,11 @@ find_excluding_dir() {
 pdfs(){
 
     # Save the current directory and change to the new one
-    pushd /run/media/wytchfyre/ghostnation/repositories/pdf_data > /dev/null
+    pushd /run/media/firebat/ghostnation/repositories/pdf_data > /dev/null
 
     # Run the command
     local selected_file
-    selected_file=$(find /run/media/wytchfyre/ghostnation/repositories/pdf_data -type f | fzf --reverse --height=50%)
+    selected_file=$(find /run/media/firebat/ghostnation/repositories/pdf_data -type f | fzf --reverse --height=50%)
     if [[ -n "$selected_file" ]]; then
        sioyek "$selected_file" >/dev/null 2>&1 &
        
@@ -63,13 +104,7 @@ pdfs(){
 
 }
 
-# Opens gemini-cli via npx
-gemini(){
-
-	npx https://github.com/google-gemini/gemini-cli
-
-}
-
+alias gemini="node /home/firebat/lib/node_modules/@google/gemini-cli/dist/index.js"
 
 export EDITOR="nvim"
 export TMPDIR=/tmp
@@ -99,13 +134,14 @@ fi
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+alias n ='nvim'
 PS1='[\u@\h \W]\$ '
 
 # Autojumps test mechanism and initialization
 # [[ -s /home/wytchfyre/.autojump/etc/profile.d/autojump.sh ]] && source /home/wytchfyre/.autojump/etc/profile.d/autojump.sh
 export EDITOR="nvim"
-export PATH="/home/wytchfyre/.local/bin/:$PATH"
-export PATH="/home/wytchfyre/.cargo/bin:$PATH"
+export PATH="/home/firebat/.local/bin/:$PATH"
+export PATH="/home/firebat/.cargo/bin:$PATH"
 
 # >>> conda initialize >>>
 
@@ -157,7 +193,7 @@ fh() {
 # Function to run Vieb
 vieb() {
     # Save the current directory and change to the new one
-    pushd /home/wytchfyre/repositories/Vieb > /dev/null
+    pushd /home/firebat/repositories/Vieb > /dev/null
 
     # Run the command
     npm start &
@@ -202,3 +238,21 @@ tm() {
 
 
 
+
+
+source /home/firebat/.config/broot/launcher/bash/br
+
+# >>> juliaup initialize >>>
+
+# !! Contents within this block are managed by juliaup !!
+
+case ":$PATH:" in
+    *:/home/firebat/.juliaup/bin:*)
+        ;;
+
+    *)
+        export PATH=/home/firebat/.juliaup/bin${PATH:+:${PATH}}
+        ;;
+esac
+
+# <<< juliaup initialize <<<

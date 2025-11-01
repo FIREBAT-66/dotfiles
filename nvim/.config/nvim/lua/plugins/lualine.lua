@@ -1,3 +1,57 @@
+local function get_file_size()
+  -- 1. Get the full path of the current buffer.
+  local file_path = vim.fn.expand('%:p')
+
+  -- 2. Use vim.fn.getfsize() to get the file size.
+  --    This function returns the size formatted (e.g., "2.5K", "10M", "1024B").
+  --    It returns '-1' for non-existent files or special buffers.
+  local size = vim.fn.getfsize(file_path)
+
+  -- Optional: Handle special buffers like [No Name] or directories
+  if size == '-1' then
+    return '0B'
+  end
+
+  return size .. 'B'
+end
+
+-- A Lua function to fetch the current Git branch name of the repository
+-- containing the current buffer's file.
+local function get_git_branch()
+  -- The command to get the current branch name, abbreviated.
+  -- This command is run by git in the directory of the current file.
+  local git_command = 'git rev-parse --abbrev-ref HEAD'
+
+  -- Use vim.fn.system() to execute the command.
+  -- This returns the command output, including a trailing newline.
+  local branch_name = vim.fn.system(git_command)
+
+  -- The output from vim.fn.system() includes a trailing newline,
+  -- so we use string.gsub to trim leading/trailing whitespace.
+  branch_name = branch_name:gsub('^%s*(.-)%s*$', '%1')
+
+  -- Check if the command failed or if the output is empty (e.g., not a git repo)
+  if branch_name == '' or branch_name:find('fatal:') then
+    -- Return a recognizable default string for non-git files
+    return ' ' 
+  end
+
+  -- Prefix the branch name with a recognizable icon/symbol
+  return '󰊢 ' .. branch_name
+end
+
+-- --- EXAMPLE USAGE ---
+-- If you were using this in a lualine configuration, you would pass
+-- the function itself (not its result) to the sections table:
+
+-- sections = {
+--   lualine_a = { 'mode' },
+--   lualine_b = { get_git_branch } -- Here is where we use the function
+-- }
+
+-- For demonstration, let's print the result:
+print(string.format("Current Branch: %s", get_git_branch()))
+
 return {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -13,7 +67,7 @@ return {
       local filename = {
         'filename',
         file_status = true, -- displays file status (readonly status, modified status)
-        path = 2, -- 0 = just filename, 1 = relative path, 2 = absolute path
+        path = 0, -- 0 = just filename, 1 = relative path, 2 = absolute path
       }
 
       local hide_in_width = function()
@@ -41,17 +95,23 @@ return {
         normal = {
           a = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
           b = { fg = '#2b2b2b', bg = '#80401a' },
-          c = { fg = '#ff6000', bg = 'none' },
+          c = { fg = '#ff6000', bg = '#2b2b2b' },
         },
         insert = {
-          a = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
+          a = { fg = '#2c2c2c', bg = '#1bfd9c', gui = 'bold' },
           b = { fg = '#2b2b2b', bg = '#80401a' },
           c = { fg = '#ff6000', bg = 'none' },
+          x = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
+          y = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
+          z = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
         },
         visual = {
-          a = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
+          a = { fg = '#1bfd9c', bg = '#2b2b2b', gui = 'bold' },
           b = { fg = '#2b2b2b', bg = '#80401a' },
           c = { fg = '#ff6000', bg = 'none' },
+          x = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
+          y = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
+          z = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
         },
         replace = {
           a = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
@@ -73,17 +133,17 @@ return {
           -- https://www.nerdfonts.com/cheat-sheet
           --        
           section_separators = { left = '', right = '' },
-          component_separators = { left = '', right = '--' },
+          component_separators = { left = '', right = '' },
           -- disabled_filetypes = { 'alpha', 'neo-tree', 'explorer'},
           always_divide_middle = true,
         },
         sections = {
-          lualine_a = { mode },
-          lualine_b = { 'branch' },
+          lualine_a = {mode },
+          lualine_b = { get_git_branch, { 'filetype', cond = hide_in_width }},
           lualine_c = { filename },
-          lualine_x = { diagnostics, diff, { 'encoding', cond = hide_in_width }, { 'filetype', cond = hide_in_width } },
-          lualine_y = { 'location' },
-          lualine_z = { 'progress' },
+          lualine_x = { diagnostics, diff },
+          lualine_y = { 'searchcount' },
+          lualine_z = {get_file_size, 'location', 'progress' },
         },
         inactive_sections = {
           lualine_a = {},
@@ -94,7 +154,7 @@ return {
           lualine_z = {},
         },
         tabline = {},
-        extensions = { 'fugitive' },
+        extensions = { 'oil' },
       }
     end,
   }

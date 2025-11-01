@@ -5,7 +5,7 @@ return {
   ---@type snacks.Config
   opts = {
     bigfile = { enabled = true },
-    dashboard = { enabled = true },
+    dashboard = { enabled = true},
     explorer = { enabled = true },
     indent = { enabled = false },
     input = { enabled = true },
@@ -14,6 +14,30 @@ return {
       timeout = 3000,
     },
     picker = {
+      layout = {
+
+  preview = "main",
+  layout = {
+    backdrop = false,
+    width = 40,
+    min_width = 40,
+    height = 0.3,
+    position = "right",
+    border = "none",
+    box = "vertical",
+    {
+      win = "input",
+      height = 1,
+      border = true,
+      title = "{title} {live} {flags}",
+      title_pos = "center",
+    },
+    { win = "list", border = "none" },
+    { win = "preview", title = "{preview}", height = 0.4, border = "top" },
+  },
+
+      },
+      prompt = "  : ",
       enabled = true,
       sources = {
         files = { hidden = true },
@@ -21,8 +45,22 @@ return {
     },
     quickfile = { enabled = true },
     scope = { enabled = true },
-    scroll = { enabled = true},
-    statuscolumn = { enabled = true },
+    scroll = { enabled = true,
+      ---@class snacks.scroll.Config
+      ---@field animate snacks.animate.Config|{}
+      ---@field animate_repeat snacks.animate.Config|{}|{delay:number}
+        animate = {
+          duration = { step = 100, total = 200 },
+          easing = "linear",
+        },
+        -- faster animation when repeating scroll after delay
+        animate_repeat = {
+          delay = 100, -- delay in ms before using the repeat animation
+          duration = { step = 100, total = 50 },
+          easing = "linear",
+        },
+    },
+    -- statuscolumn = { enabled = true },
     words = { enabled = true },
     styles = {
       notification = {
@@ -534,8 +572,8 @@ return {
         Snacks.toggle.diagnostics():map("<leader>ud")
         Snacks.toggle.line_number():map("<leader>ul")
         Snacks.toggle
-            .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-            :map("<leader>uc")
+        .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
+        :map("<leader>uc")
         Snacks.toggle.treesitter():map("<leader>uT")
         Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
         Snacks.toggle.inlay_hints():map("<leader>uh")
