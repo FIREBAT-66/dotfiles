@@ -9,7 +9,9 @@ require("config.vimtex.config")
 require("config.highlight_groups.highlights")
 -- Set up LSP servers
 require("config.lsp.luals")
-require("config.lsp.pylsp")
+-- require("config.lsp.pylsp")
+
+vim.lsp.enable("basedpyright")
 -- pulls in the autocommand for julials
 require("config.lsp.julials")
 
@@ -54,7 +56,7 @@ vim.opt.cursorline = false				-- highlight the current line
 vim.opt.number = true					-- set numbered lines
 vim.opt.breakindent = true				-- wrap lines with indent
 vim.opt.relativenumber = true				-- set relative numbered lines
-vim.opt.numberwidth = 4					-- set number column width to 2 {default 4}
+vim.opt.numberwidth = 3					-- set number column width to 2 {default 4}
 -- Enable word-wise line breaking (wrap at spaces)
 vim.opt.wrap = true           -- enable line wrapping
 vim.opt.linebreak = true      -- break only at word boundaries
@@ -141,45 +143,45 @@ vim.diagnostic.config({
 -- vim.api.nvim_create_augroup("remember_folds", { clear = true })
 --
 -- vim.api.nvim_create_autocmd("BufWinLeave", {
-	--   group = "remember_folds",
-	--   pattern = "*",
-	--   command = "mkview",
-	-- })
-	--
-	-- vim.api.nvim_create_autocmd("BufWinEnter", {
-		--   group = "remember_folds",
-		--   pattern = "*",
-		--   command = "silent! loadview",
-		-- })
+--   group = "remember_folds",
+--   pattern = "*",
+--   command = "mkview",
+-- })
+--
+-- vim.api.nvim_create_autocmd("BufWinEnter", {
+--   group = "remember_folds",
+--   pattern = "*",
+--   command = "silent! loadview",
+-- })
 
 
 
-		-- 1. Set the global slime target to 'neovim'.
-		-- This tells vim-slime to look for an open Neovim terminal buffer to send text to.
-		vim.g.slime_target = "neovim"
+-- 1. Set the global slime target to 'neovim'.
+-- This tells vim-slime to look for an open Neovim terminal buffer to send text to.
+vim.g.slime_target = "neovim"
 
-		-- Set bracketed paste mode for Neovim so slime can deliver data to ipython interpreters
-		vim.g.slime_bracketed_paste = 1
-		vim.g.slime_python_ipython = 1
+-- Set bracketed paste mode for Neovim so slime can deliver data to ipython interpreters
+vim.g.slime_bracketed_paste = 1
+vim.g.slime_python_ipython = 1
 
 
 
-		-- vim.api.nvim_create_autocmd("VimEnter", {
-			--     group = augroup,
-			--     callback = function()
-				--         -- Check if the current buffer is a 'normal' text buffer
-				--         -- buftype should be empty, and filetype should not be a known utility type.
-				--         -- vim.bo is a shortcut for buffer-local options.
-				--         if vim.bo.buftype == "" and not vim.tbl_contains({ 'lazy', , 'terminal', , 'quickfix', , 'help', , 'prompt', }, vim.bo.filetype) then
-				--             -- Run the command only for text-editing buffers
-				--             vim.cmd("let &statuscolumn=' %C%l %=%#StatusColumnBorder#▍%s'")
-				--
-				--             -- Example: Print a message
-				--             print("VimEnter: Statuscolumn set for a text buffer!")
+-- vim.api.nvim_create_autocmd("VimEnter", {
+--     group = augroup,
+--     callback = function()
+--         -- Check if the current buffer is a 'normal' text buffer
+--         -- buftype should be empty, and filetype should not be a known utility type.
+--         -- vim.bo is a shortcut for buffer-local options.
+--         if vim.bo.buftype == "" and not vim.tbl_contains({ 'lazy', , 'terminal', , 'quickfix', , 'help', , 'prompt', }, vim.bo.filetype) then
+--             -- Run the command only for text-editing buffers
+--             vim.cmd("let &statuscolumn=' %C%l %=%#StatusColumnBorder#▍%s'")
+--
+--             -- Example: Print a message
+--             print("VimEnter: Statuscolumn set for a text buffer!")
 
-				--         end
-				--     end,
-				-- })
+--         end
+--     end,
+-- })
 
 
 -- vim.opt.statuscolumn = [[%!v:lua.StatusColumn()]]
@@ -191,27 +193,30 @@ vim.diagnostic.config({
 
 -- Global configuration to disable all diagnostic signs
 vim.diagnostic.config({
-  signs = false, -- This is the key setting
+	signs = false, -- This is the key setting
 })
 
 
 
 -- Explicitly tell Neovim to use wl-copy and wl-paste
 vim.g.clipboard = {
-  name = 'wl-copy',
-  copy = {
-    ['+'] = { 'wl-copy', '--trim-newline' }, -- The '+' register is the system clipboard
-    ['*'] = { 'wl-copy', '--trim-newline' }, -- The '*' register is the primary selection
-  },
-  paste = {
-    ['+'] = 'wl-paste -n',
-    ['*'] = 'wl-paste -n',
-  },
-  cache_enabled = 1,
+	name = 'wl-copy',
+	copy = {
+		['+'] = { 'wl-copy', '--trim-newline' }, -- The '+' register is the system clipboard
+		['*'] = { 'wl-copy', '--trim-newline' }, -- The '*' register is the primary selection
+	},
+	paste = {
+		['+'] = 'wl-paste -n',
+		['*'] = 'wl-paste -n',
+	},
+	cache_enabled = 1,
 }
 
 -- Still need to set this option for y/p to use the system clipboard
 vim.opt.clipboard = "unnamedplus"
+
+-- Disable showmatch
+-- vim.opt.showmatch = false
 
 -- vim.g.vimtex_compiler_latexmk = {
 --   executable = 'latexmk',

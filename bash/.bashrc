@@ -11,15 +11,25 @@ gc(){
   echo "|.git| = $(du -s .git)"
 } 
 
+# Custom alias to open Neovim and launch Oil in the current directory
+alias nvoil='nvim -c "Oil"'
+bind '"\ee": "nvoil\n"'
+
+bind '"\e\r": "nvim\n"'
+
+alias bpy='/home/firebat/python_3.11/python'
+alias bpy_venv='source /home/firebat/bpy_venv/bin/activate'
+
+
 # Advanced fzf finder using fzf and find. Toggles between a directory find and a file find. Uses process substitution to permit asynchronous piping to the fzf output (which may result in delays in finding the target file if the directory is large). Also supports toggling search depth via CTRL+<INTEGER>. Will copy the selected directory or filename to clipboard using wl-copy
 ff() {
     local selected_dir
     local current_dir=$(pwd)
-    selected_dir=$(fzf --reverse --height=50% < <(find .))
+    selected_dir=$(fzf --sync --reverse --height=25% --algo=v1 --bind='ctrl-d:change-prompt(directories: )+reload(find . -type d)' --bind='ctrl-f:change-prompt(files: )+reload(find . -type f)' --header 'ctrl-d (directory_search) / ctrl-f (file_search)' < <(find .))
     if [[ -n "$selected_dir" ]] && [[ -d "$selected_dir" ]]; then
         cd "$selected_dir" && wl-copy "${current_dir}/${selected_dir#*/}"
     elif [[ -n "$selected_dir" ]] && [[ -f "$selected_dir" ]]; then
-        xdg-open "$selected_dir" && wl-copy "${current_dir}/${selected_dir#*/}"
+         wl-copy "${current_dir}/${selected_dir#*/}" && xdg-open "$selected_dir" > /dev/null 2>&1 &
     else
         echo "No file or directory selected"
     fi
@@ -30,11 +40,10 @@ locate(){
 ls -a | fzf --bind='ctrl-d:change-prompt(directories: )+reload(find . -type d)' --bind='ctrl-f:change-prompt(files: )+reload(find . -type f)' --header 'ctrl-d (directory_search) / ctrl-f (file_search)'
 }
 
-# Custom alias to open Neovim and launch Oil in the current directory
-alias nvoil='nvim -c "Oil"'
-bind '"\ee": "nvoil\n"'
+locate(){
+  fzf --bind='ctrl-d:change-prompt(directories: )+reload(find . -type d)' --bind='ctrl-f:change-prompt(files: )+reload(find . -type f)' --header 'ctrl-d (directory_search) / ctrl-f (file_search)' < <(find .)
+}
 
-bind '"\e\r": "nvim\n"'
 
 # Function to run Vieb
 vieb() {

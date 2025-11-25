@@ -16,31 +16,31 @@ return {
     picker = {
       layout = {
 
-  preview = "main",
-  layout = {
-    backdrop = false,
-    width = 40,
-    min_width = 40,
-    height = 0.3,
-    position = "right",
-    border = "none",
-    box = "vertical",
-    {
-      win = "input",
-      height = 1,
-      border = true,
-      title = "{title} {live} {flags}",
-      title_pos = "center",
-    },
-    { win = "list", border = "none" },
-    { win = "preview", title = "{preview}", height = 0.4, border = "top" },
-  },
+        preview = "main",
+        layout = {
+          backdrop = false,
+          width = 40,
+          min_width = 40,
+          height = 0.3,
+          position = "right",
+          border = "none",
+          box = "vertical",
+          {
+            win = "input",
+            height = 1,
+            border = true,
+            title = "{title} {live} {flags}",
+            title_pos = "center",
+          },
+          { win = "list", border = "none" },
+          { win = "preview", title = "{preview}", height = 0.4, border = "top" },
+        },
 
       },
       prompt = "  : ",
       enabled = true,
       sources = {
-        files = { hidden = true },
+        files = { hidden = false },
       },
     },
     quickfile = { enabled = true },
@@ -432,15 +432,15 @@ return {
       desc = "LSP Workspace Symbols",
     },
     -- Other
+    -- {
+    --   "<leader>z",
+    --   function()
+    --     Snacks.zen()
+    --   end,
+    --   desc = "Toggle Zen Mode",
+    -- },
     {
       "<leader>z",
-      function()
-        Snacks.zen()
-      end,
-      desc = "Toggle Zen Mode",
-    },
-    {
-      "<leader>Z",
       function()
         Snacks.zen.zoom()
       end,
