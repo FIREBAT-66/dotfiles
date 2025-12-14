@@ -101,61 +101,66 @@ return {
           a = { fg = '#2c2c2c', bg = '#1bfd9c', gui = 'bold' },
           b = { fg = '#2b2b2b', bg = '#80401a' },
           c = { fg = '#ff6000', bg = 'none' },
-          x = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
-          y = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
-          z = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
+          -- x = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
+          -- y = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
+          -- z = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
         },
         visual = {
-          a = { fg = '#1bfd9c', bg = '#2b2b2b', gui = 'bold' },
+          a = { fg = '#2c2c2c', bg = '#1bfd9c', gui = 'bold' },
           b = { fg = '#2b2b2b', bg = '#80401a' },
           c = { fg = '#ff6000', bg = 'none' },
-          x = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
-          y = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
-          z = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
-        },
-        replace = {
-          a = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
-          b = { fg = '#2b2b2b', bg = '#80401a' },
-          c = { fg = '#ff6000', bg = 'none' },
-        },
-        inactive = {
-          a = { fg = '#ff6000', bg = '#80401a', gui = 'bold' },
-          b = { fg = '#ff6000', bg = '#80401a' },
-          c = { fg = '#ff6000', bg = '#80401a' },
-        },
-      }
+        -- x = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
+        -- y = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
+        -- z = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
+      },
+      replace = {
+        a = { fg = '#2c2c2c', bg = '#ff6000', gui = 'bold' },
+        b = { fg = '#2b2b2b', bg = '#80401a' },
+        c = { fg = '#ff6000', bg = 'none' },
+      },
+      inactive = {
+        a = { fg = '#ff6000', bg = '#80401a', gui = 'bold' },
+        b = { fg = '#ff6000', bg = '#80401a' },
+        c = { fg = '#ff6000', bg = '#80401a' },
+      },
+    }
 
-      require('lualine').setup {
-        options = {
-          icons_enabled = true,
-          theme = my_custom_theme, -- Set theme based on environment variable
-          -- Some useful glyphs:
-          -- https://www.nerdfonts.com/cheat-sheet
-          --        
-          section_separators = { left = '', right = '' },
-          component_separators = { left = '', right = '' },
-          -- disabled_filetypes = { 'alpha', 'neo-tree', 'explorer'},
-          always_divide_middle = true,
-        },
-        sections = {
-          lualine_a = {mode },
-          lualine_b = { get_git_branch, { 'filetype', cond = hide_in_width }},
-          lualine_c = { filename },
-          lualine_x = { diagnostics, diff },
-          lualine_y = { 'searchcount' },
-          lualine_z = {get_file_size, 'location', 'progress' },
-        },
-        inactive_sections = {
-          lualine_a = {},
-          lualine_b = {},
-          lualine_c = { { 'filename', path = 1 } },
-          lualine_x = { { 'location', padding = 0 } },
-          lualine_y = {},
-          lualine_z = {},
-        },
-        tabline = {},
-        extensions = { 'oil' },
-      }
-    end,
-  }
+    require('lualine').setup {
+      options = {
+        icons_enabled = true,
+        theme = my_custom_theme, -- Set theme based on environment variable
+        -- Some useful glyphs:
+        -- https://www.nerdfonts.com/cheat-sheet
+        --        
+        section_separators = { left = '', right = '' },
+        component_separators = { left = '', right = '' },
+        -- disabled_filetypes = { 'alpha', 'neo-tree', 'explorer'},
+        always_divide_middle = true,
+      },
+      sections = {
+        lualine_a = {mode },
+        lualine_b = { get_git_branch, { 'filetype', cond = hide_in_width }},
+        lualine_c = { filename },
+        lualine_x = { diagnostics, diff },
+        lualine_y = { 'searchcount' },
+        lualine_z = {get_file_size, 'location', 'progress' },
+      },
+      inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = { { 'filename', path = 1 } },
+        lualine_x = { { 'location', padding = 0 } },
+        lualine_y = {},
+        lualine_z = {},
+      },
+      tabline = {},
+      extensions = { 'oil' },
+    }
+  end,
+}
+
+
+
+
+
 
